@@ -68,7 +68,7 @@ if __name__=="__main__":
        pub.publish(msg)
 
   except:
-    print 'error'
+    print ('error')
 
   finally:
     msg = AckermannDriveStamped();
