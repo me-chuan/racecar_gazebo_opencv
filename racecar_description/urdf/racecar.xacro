@@ -178,6 +178,7 @@
 
   <!-- Add Hokuyo laser scanner -->
 
+<!--
   <link name="laser">
     <inertial>
       <xacro:hokuyo_inertial_params />
@@ -203,7 +204,7 @@
     <child link="laser" />
     <axis xyz="0 0 1" />
   </joint>
-
+-->
 
   <!-- zed camera -->
   <link name="zed_camera_link">
