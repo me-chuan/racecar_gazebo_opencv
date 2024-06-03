@@ -25,7 +25,7 @@ def callback(msg):
 
 def cmd_to_akm():
     rospy.init_node('cmd_to_akm', anonymous=True)
-    rospy.Subscriber("cmd_vel", Twist, callback)
+    rospy.Subscriber("cmd_vel1", Twist, callback)
     rospy.spin()
     pass
 

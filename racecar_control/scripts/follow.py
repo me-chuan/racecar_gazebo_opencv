@@ -14,7 +14,7 @@ def set_roi_forward(h,w,mask):
     pass
 
 def follow_line(image,color):
-    cmd_vel_pub=rospy.Publisher('cmd_vel',Twist,queue_size=10)
+    cmd_vel_pub=rospy.Publisher('cmd_vel1',Twist,queue_size=10)
 
     #print(image.shape)
     #convert to HSV
@@ -62,7 +62,7 @@ def follow_line(image,color):
         cv2.circle(image,(cx,cy),20,(0,0,255),-1)
         err=cx-w/2## 50 is the center of the image(deleted)
         twist=Twist()
-        twist.linear.x=0.1
+        twist.linear.x=0.3
         twist.angular.z=-float(err)/100
         print("Linear: ",twist.linear.x)
         print("Angular: ",twist.angular.z)
