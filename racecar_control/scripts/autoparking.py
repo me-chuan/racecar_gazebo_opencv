@@ -7,6 +7,8 @@ import rospy, cv_bridge
 from sensor_msgs.msg import Image
 import time
 import apriltag
+from std_msgs.msg import String
+import os
 
 from follow import follow_line, set_roi_forward
 
@@ -83,15 +85,23 @@ def image_callback(msg):
     follow_line(img, b)
     match=do_match(img)
     #print("match: ",match)
-    if match>0.67: ##0.67 is the threshold
+    if match>0.64: ##0.64 is the threshold
         print("Stop!")
         stop(1)
         time.sleep(3)
         rospy.signal_shutdown("fin")
         pass########??????
 
+def control_callback(msg):
+    if msg.data =="switch":
+        rospy.loginfo("Shutting down autoparking function")
+        os.system("rosrun racecar_control keyboard_teleop_2.py &")
+        rospy.signal_shutdown("switching nodes")
+
 def get_camera():
     rospy.Subscriber('/camera/zed/rgb/image_rect_color',Image,image_callback)
+    #rospy.Subscriber('control_topic',String,control_callback) ## Subscribe to the control_topic ##
+    #rospy.loginfo("autoparking node is running")
     pass
 
 if __name__=='__main__':

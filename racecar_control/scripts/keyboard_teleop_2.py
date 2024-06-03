@@ -5,6 +5,10 @@ from ackermann_msgs.msg import AckermannDriveStamped
 
 import sys, select, termios, tty
 
+from std_msgs.msg import String
+import os
+
+
 banner = """
 Reading from the keyboard  and Publishing to AckermannDriveStamped!
 ---------------------------
@@ -34,6 +38,7 @@ settings = termios.tcgetattr(sys.stdin)
 def pub_cmd():
     index = 1
     rospy.init_node("pub_cmd")
+    #rospy.Subscriber("control_topic", String, control_callback)
     pub = rospy.Publisher('/vesc/ackermann_cmd_mux/input/teleop', AckermannDriveStamped, queue_size=10)
     akm=AckermannDriveStamped()
     while True:
@@ -66,6 +71,13 @@ def pub_cmd():
         print("Steering_Angle:",akm.drive.steering_angle)
         pub.publish(akm)
         print("Message From key_op.py Published\n")
+
+
+def control_callback(msg):
+    if msg.data =="switch":
+        rospy.loginfo("Shutting down keyboard_control function")
+        os.system("rosrun racecar_control parking.py &")
+        rospy.signal_shutdown("switching nodes")
 
 if __name__=="__main__":
     try:
