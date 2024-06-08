@@ -6,16 +6,16 @@ import numpy as np
 import rospy, cv_bridge
 from sensor_msgs.msg import Image
 import time
-import apriltag
-from std_msgs.msg import String
-import os
+#import apriltag
+#from std_msgs.msg import String
+#import os
 
 from follow import follow_line, set_roi_forward
 
 def range_detection(img):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)## Convert the image to grayscale ##
 
-    sobel = cv2.Sobel(gray, cv2.CV_8U, 1, 0, ksize=3)
+    sobel = cv2.Sobel(gray, cv2.CV_8U, 1, 0, ksize=3)## Apply the Sobel operator ##
 
     ret,binary = cv2.threshold(sobel, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
@@ -58,7 +58,7 @@ def stop(id):
 
 def do_match(frame):
     max=0.0
-
+    ## Load the template image ##
     template=cv2.imread(r"/home/chuan/Desktop/stopsign2.png",cv2.IMREAD_GRAYSCALE) ## Load the template image ##
     if template is None:
         raise FileNotFoundError("Template image not found at path: /home/chuan/Desktop/stopsign2.png")
@@ -85,19 +85,20 @@ def image_callback(msg):
     follow_line(img, b)
     match=do_match(img)
     #print("match: ",match)
-    if match>0.64: ##0.64 is the threshold
+    if match>0.63: ##0.63 is the threshold
         print("Stop!")
         stop(1)
         time.sleep(3)
         rospy.signal_shutdown("fin")
         pass########??????
 
+""" ## Callback function for the control_topic(this function is not used in this script) ##
 def control_callback(msg):
     if msg.data =="switch":
         rospy.loginfo("Shutting down autoparking function")
         os.system("rosrun racecar_control keyboard_teleop_2.py &")
         rospy.signal_shutdown("switching nodes")
-
+"""
 def get_camera():
     rospy.Subscriber('/camera/zed/rgb/image_rect_color',Image,image_callback)
     #rospy.Subscriber('control_topic',String,control_callback) ## Subscribe to the control_topic ##

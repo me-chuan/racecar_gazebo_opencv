@@ -6,6 +6,7 @@ import sys
 process1 = None
 process2 = None
 
+## Start program1.py
 def start_program1():
     global process1
     if process1 is not None:

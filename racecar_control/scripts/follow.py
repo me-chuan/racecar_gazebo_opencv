@@ -22,6 +22,7 @@ def follow_line(image,color):
     #cv2.imshow("HSV",hsv)
     #cv2.namedWindow("HSV",0)
 
+    ## choose the path in accordance with the color of the parking lot
     if color=="yellow":
         lower_color=numpy.array([ 26, 43, 46])## lower limit of the yellow color
         upper_color=numpy.array([ 34, 255, 255])## upper limit of the yellow color
@@ -40,9 +41,9 @@ def follow_line(image,color):
         raise ValueError("Invalid color")
     # Convert to binary image
     if color == 'red':
-        mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
-        mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
-        mask = cv2.bitwise_or(mask1, mask2)
+        mask1 = cv2.inRange(hsv, lower_red1, upper_red1)## mask1 is the binary image of the red color
+        mask2 = cv2.inRange(hsv, lower_red2, upper_red2)## mask2 is the binary image of the red color
+        mask = cv2.bitwise_or(mask1, mask2)## mask is the binary image of the red color
     else:
         mask = cv2.inRange(hsv, lower_color, upper_color)
     #cv2.namedWindow("binary image",0)
@@ -73,7 +74,7 @@ def follow_line(image,color):
     cv2.imshow("Original",image)
     cv2.waitKey(1)
     pass
-
+## Callback function for the image message
 def image_callback(msg):
     print("Received an image!")
     bridge=cv_bridge.CvBridge()
@@ -82,6 +83,7 @@ def image_callback(msg):
     pass
 
 if __name__ == '__main__':
+    ## Choose the color of the parking lot
     a=int(input("which parking lot to follow: 1 for yellow, 2 for blue, 3 for red, 4 for green\n"))
     color_index={1:"yellow",2:"blue",3:"red",4:"green"}
     b=color_index[a] ## color of the parking lot
